@@ -3,6 +3,9 @@
 namespace Jumbodroid\Sms\ServiceProviders;
 
 use Illuminate\Support\ServiceProvider;
+use Jumbodroid\Sms\Config;
+use Jumbodroid\Sms\Contracts\SmsGateway;
+use Jumbodroid\Sms\Gateways\AfricasTalking;
 
 /**
  * Class SmsServiceProvider
@@ -38,6 +41,14 @@ class SmsServiceProvider extends ServiceProvider
         |--------------------------------------------------------------------------
         */
         $this->migrationPublisher();
+
+        /*
+        |---------------------------------------------------------------------------
+        | Publish models
+        |---------------------------------------------------------------------------
+        |
+        */
+        $this->modelPublisher();
     }
 
     /**
@@ -74,7 +85,20 @@ class SmsServiceProvider extends ServiceProvider
      */
     private function implementationBindings()
     {
-        // $this->app->singleton(RbacInterface::class, Rbac::class);
+
+        $this->app->bind(SmsGateway::class, function($app){
+            $config = new Config();
+            $defaultGateway = $config->get("defaultGateway");
+
+            try {
+                $gateway = new $config->get("gateways.$defaultGateway.class");
+                if($gateway instanceof SmsGateway) return $gateway;
+            } catch(\Exception $e) {
+                // code
+            }
+
+            return new AfricasTalking();
+        });
     }
 
     /**
@@ -96,6 +120,13 @@ class SmsServiceProvider extends ServiceProvider
         // When users execute Laravel's vendor:publish command, the migration file will be copied to the specified location
         $this->publishes([
             dirname(__DIR__) . '/Migrations/2020_08_18_133916_create_sms_tables.php' => database_path('migrations/2020_08_18_133916_create_sms_tables.php'),
+        ]);
+    }
+
+    private function modelPublisher()
+    {
+        $this->publishes([
+            dirname(__DIR__) . '/SmsOutbox.php' => app_path('Sms/SmsOutbox.php')
         ]);
     }
 

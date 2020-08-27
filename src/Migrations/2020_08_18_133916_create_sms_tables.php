@@ -20,7 +20,7 @@ class CreateSmsTables extends Migration
 
         $tables = array_map(function($i) use($prefix) {
             return $prefix.$i;
-        }, explode(',', 'outbox,inbox,draft,sent,recipients,gateways'));
+        }, explode(',', 'outbox,inbox'));
 
         try {
             $dbname=DB::connection()->getDatabaseName();
@@ -36,7 +36,7 @@ class CreateSmsTables extends Migration
                     }
                 }
 
-                // create schema
+                $this->upOutboxTable($prefix);
             }
         } catch(Exception $e) {
             // do nothing
@@ -50,6 +50,27 @@ class CreateSmsTables extends Migration
      */
     public function down()
     {
-        $prefix = $this->tablePrefix;
+        $prefix = config('sms.tablePrefix') ?? $this->tablePrefix;
+        $this->downOutboxTable($prefix);
+    }
+
+    private function upOutboxTable($prefix)
+    {
+        Schema::create($prefix.'outbox', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('recipient_id')->unsigned()->nullable(true);
+            $table->string('recipient_group', 191)->nullable(true);
+            $table->string('phone', 50)->nullable(false);
+            $table->text('message')->nullable(false);
+            $table->enum('status', ['DRAFT', 'PENDING', 'SENT'])->nullable(false)->default('DRAFT');
+            $table->dateTime('sent_at')->nullable(true);
+            $table->dateTime('delivered_at')->nullable(true);
+            $table->timestamps();
+        });
+    }
+
+    private function downOutboxTable($prefix)
+    {
+        Schema::dropIfExists($prefix.'outbox');
     }
 }
