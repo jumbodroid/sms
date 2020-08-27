@@ -26,9 +26,8 @@ final class Network
         if(empty($headers))
         {
             $headers = [ self::HEADER_CONTENT_TYPE_JSON, self::HEADER_ACCEPT_JSON ];
+            $data = json_encode($data);
         }
-
-        $data = json_encode($data);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
