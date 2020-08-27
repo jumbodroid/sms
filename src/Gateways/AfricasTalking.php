@@ -206,9 +206,9 @@ class AfricasTalking implements SmsGateway
                             }]
                         }
                     }
-
+     /
      */
-	public function send($to, string $message, string $from = null, bool $enqueue=false) : bool
+	public function send($to, string $message, string $from = null, bool $enqueue=false)
 	{
         $to = (array) $to;
 		$data = ['username' => $this->username, 'to' => implode(",", $to), 'message' => $message,];
