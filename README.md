@@ -18,11 +18,41 @@ SMS is a modern Short Messaging Service package for PHP
 3. Run migrations
     >> php artisan migrate
 
-4. Append the contents of [.env.example](env) to your `.env` and set valid them to valid values
+4. Append the contents of [.env.example](.env.example) to your `.env` and set valid values as needed
 
-## Usage
+## Usage with Laravel Framework
 
->> $sms = App::make(SmsGateway);
->> $response = $sms->send($to, $message, $from, $headers=null);
->> exit(var_dump($response));
+### example response
+    use Illuminate\Support\Facades\App;
+    use Jumbodroid\Sms\Contracts\SmsGateway;
+
+    $sms = App::make(SmsGateway::class); // uses the default gateway which can be configured in `config/sms.php`
+    $rs = $sms->send(['+2547XXXXXXXX', '+2547XXXXXXXX'], 'It works!');
+    header('Content-Type: application/json');
+    echo $rs;
+    exit;
+
+### example response
+    {
+        "error":false,
+        "message":{
+            "SMSMessageData":{
+                "Message":"Sent to 2\/2 Total Cost: KES 1.6000",
+                "Recipients":[
+                    {
+                        "statusCode":101,
+                        "number":"++2547XXXXXXXX",
+                        "cost":"KES 0.8000",
+                        "status":"Success","messageId":"ATXid_08d1018ef5d9d6ae514f1ad5893296e1"
+                    },
+                    {
+                        "statusCode":101,
+                        "number":"++2547XXXXXXXX",
+                        "cost":"KES 0.8000",
+                        "status":"Success","messageId":"ATXid_3585063525cd17db7e4db611ff35c8a6"
+                    }
+                ]
+            }
+        }
+    }
 
