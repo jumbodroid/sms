@@ -206,6 +206,23 @@ class AfricasTalking implements SmsGateway
                             }]
                         }
                     }
+
+        Another example
+                {
+                    "SMSMessageData":
+                        {
+                            "Message":"Sent to 1/1 Total Cost: KES 0.8000",
+                            "Recipients":[
+                                {
+                                    "statusCode":101,
+                                    "number":"+2547XXXXXXXX",
+                                    "cost":"KES 0.8000",
+                                    "status":"Success",
+                                    "messageId":"ATXid_a17e9593364ab4fc8d9726e41c5b21a7"
+                                }
+                            ]
+                        }
+                }
      /
      */
 	public function send($to, string $message, string $from = null, bool $enqueue=false)

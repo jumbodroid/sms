@@ -55,10 +55,13 @@ final class Network
         }
 
         curl_close($ch);
-        return json_encode([
+        $return = json_encode([
             'result' => $result,
             'info' => $info,
+            'errno' => $errno,
         ]);
+
+        return json_decode($return);
     }
 
     public static function post(string $url, $data, array $headers=null)
