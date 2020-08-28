@@ -53,7 +53,7 @@ final class Network
                 exit(var_dump($info));
         }
         curl_close($ch);
-        return json_decode([
+        return json_encode([
             'result' => $result,
             'info' => $info,
         ]);
