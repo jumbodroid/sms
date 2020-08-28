@@ -22,7 +22,7 @@ final class Network
         // prevents external instantiation
     }
 
-    private static function nonGetCall(string $method, $url, array $data, array $headers=null)
+    private static function nonGetCall(string $method, $url, $data, array $headers=null)
     {
         if(empty($headers))
         {
