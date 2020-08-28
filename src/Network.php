@@ -35,33 +35,26 @@ final class Network
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
         curl_setopt($ch, CURLOPT_USERAGENT, self::USER_AGENT);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
         $errno = curl_errno($ch);
-        switch ($errno) {
-            case CURLE_OK:
-                // All OK, no actions needed.
-                break;
-            case CURLE_COULDNT_RESOLVE_PROXY:
-            case CURLE_COULDNT_RESOLVE_HOST:
-            case CURLE_COULDNT_CONNECT:
-            case CURLE_OPERATION_TIMEOUTED:
-            case CURLE_SSL_CONNECT_ERROR:
-            default:
-                exit(var_dump($info));
+        curl_close($ch);
+        if($errno == CURLE_OK)
+        {
+            return json_encode([
+                'error' => false,
+                'message' => json_decode($result, true),
+            ]);
         }
 
-        curl_close($ch);
-        $return = json_encode([
-            'result' => $result,
-            'info' => $info,
+        return json_encode([
+            'error' => true,
+            'message' => $info,
             'errno' => $errno,
+            'result' => (string) $result
         ]);
-
-        return json_decode($return);
     }
 
     public static function post(string $url, $data, array $headers=null)
