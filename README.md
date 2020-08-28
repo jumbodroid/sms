@@ -1,28 +1,28 @@
 # SMS
 
-SMS is a modern Short Messaging Service package for PHP
+SMS is a simple yet modern Short Messaging Service package for PHP
 
 >Leverage SMS to quickly integrate with SMS gateways
 
-## Installation
+## Installation - Laravel
 
 1. Require the sms package
-    >> composer require jumbodroid/sms
+    >composer require jumbodroid/sms
 
 2. Add the sms service provider to `config/app`
-    >> Jumbodroid\Sms\ServiceProviders\SmsServiceProvider::class
+    >Jumbodroid\Sms\ServiceProviders\SmsServiceProvider::class
 
-2. Ensure there's a directory named `app/Sms` direcotry exists before you publish the package files
-    >> php artisan vendor:publish --provider='Jumbodroid\Sms\ServiceProviders\SmsServiceProvider'
+2. Ensure that `app/Sms` direcotory exists before you publish the package files
+    >php artisan vendor:publish --provider='Jumbodroid\Sms\ServiceProviders\SmsServiceProvider'
 
 3. Run migrations
-    >> php artisan migrate
+    >php artisan migrate
 
 4. Append the contents of [.env.example](.env.example) to your `.env` and set valid values as needed
 
-## Usage with Laravel Framework
+## Usage - Laravel
 
-### example response
+### example request
     use Illuminate\Support\Facades\App;
     use Jumbodroid\Sms\Contracts\SmsGateway;
 
