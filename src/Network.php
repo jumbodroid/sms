@@ -53,7 +53,10 @@ final class Network
                 exit(var_dump($info));
         }
         curl_close($ch);
-        return json_decode($result);
+        return json_decode([
+            'result' => $result,
+            'info' => $info,
+        ]);
     }
 
     public static function post(string $url, $data, array $headers=null)
