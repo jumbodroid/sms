@@ -217,7 +217,7 @@ class AfricasTalking implements SmsGateway
         if (!empty($from)) $data['from'] = $from;
         else $data['from'] = $this->alphanumeric;
 
-		return Network::post($this->contentUrl.'messaging', ['form_params' => $data ], $this->defaultHeaders);
+		return Network::post($this->contentUrl.'messaging', $data, $this->defaultHeaders);
 	}
 
 	public function sendPremium($options)

@@ -38,6 +38,7 @@ final class Network
         curl_setopt($ch, CURLOPT_USERAGENT, self::USER_AGENT);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $result = curl_exec($ch);
+        $info = curl_getinfo($ch);
         $errno = curl_errno($ch);
         switch ($errno) {
             case CURLE_OK:
@@ -49,7 +50,7 @@ final class Network
             case CURLE_OPERATION_TIMEOUTED:
             case CURLE_SSL_CONNECT_ERROR:
             default:
-                exit(var_dump($errno));
+                exit(var_dump($info));
         }
         curl_close($ch);
         return json_decode($result);
