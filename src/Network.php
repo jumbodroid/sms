@@ -15,6 +15,7 @@ final class Network
     const HEADER_CONTENT_TYPE_FORM_DATA = 'Content-Type: application/x-www-form-urlencoded';
     const HEADER_CONTENT_TYPE_JSON      = 'Content-Type: application/json';
     const HEADER_ACCEPT_JSON            = 'Accept: application/json';
+    const HEADER_CONTENT_LENGTH         = 'Content-Length: ';
 
     private function __construct()
     {
@@ -25,8 +26,8 @@ final class Network
     {
         if(empty($headers))
         {
-            $headers = [ self::HEADER_CONTENT_TYPE_JSON, self::HEADER_ACCEPT_JSON ];
             $data = json_encode($data);
+            $headers = [ self::HEADER_CONTENT_TYPE_JSON, self::HEADER_ACCEPT_JSON , self::HEADER_CONTENT_LENGTH.strlen($data) ];
         }
 
         $ch = curl_init($url);
@@ -52,6 +53,7 @@ final class Network
             default:
                 exit(var_dump($info));
         }
+
         curl_close($ch);
         return json_encode([
             'result' => $result,
